@@ -84,11 +84,4 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>http_req_src</name>
-			<type>2</type>
-			<location>/Users/tsugutoshi_aoshima/Documents/workspace/HttpRequest4cpp/Debug/src</location>
-		</link>
-	</linkedResources>
 </projectDescription>

@@ -30,17 +30,24 @@ private:
 
 	int timeout_;
 
+	int socket_;
+
 	static const string DEFAULT_METHOD;
 	static const string DEFAULT_HTTP_VER;
 	static const int DEFAULT_TIMEOUT = 5000;
 
 	void openSocket(int& socket);
+	void sendData(const int socket);
+
 	HttpRequest();
+
 public:
 	HttpRequest(const URL& url);
 	virtual ~HttpRequest();
 
+	void openConnection();
 	void execute();
+	void closeConnection();
 
 	void putHeader(const string& name, const string& value);
 

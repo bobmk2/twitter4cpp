@@ -44,6 +44,20 @@ void HttpRequest::setMethod(const std::string& method) {
 	method_ = method;
 }
 
+void HttpRequest::openConnection() {
+	openSocket(socket_);
+}
+
+void HttpRequest::closeConnection() {
+}
+
+
+void HttpRequest::execute() {
+	int sock = -1;
+	openSocket(sock);
+	sendData(sock);
+}
+
 void HttpRequest::openSocket(int& socket_) {
 	struct sockaddr_in server;
 	int sock;
@@ -63,7 +77,6 @@ void HttpRequest::openSocket(int& socket_) {
 	if(url_->hasPort()){
 		server.sin_port = htons(atoi(url_->getPort().c_str()));
 	}else{
-		cout << "# port 80" << endl;
 		server.sin_port = htons(80);
 	}
 
@@ -127,9 +140,63 @@ void HttpRequest::openSocket(int& socket_) {
 
 	fprintf (fp, "\r\n");
 
+	int n = 0;
+	bool readStatusLine = false;
+	bool readHeader = false;
+	string statusLine;
+	string header;
+	string body;
 
+	memset(buf,0,bufLen);
+
+	while (fgets (buf, sizeof (buf) - 1, fp) != NULL) {
+		//printf ("%s", buf);
+
+		// CRLFが来たらヘッダ終了
+		if(!readStatusLine){
+			readStatusLine = true;
+			statusLine.append(buf,sizeof(buf));
+			cout << "sl.append" << endl;
+		}else{
+			if(!readHeader){
+				header.append(buf,sizeof(buf));
+				if (buf[0] == 0x0d && buf[1] == 0x0a) {
+					break;
+				}
+				cout << "header.append" << endl;
+			}else{
+			}
+		}
+		memset(buf,0,bufLen);
+	}
+
+	while((n = recv(sock, buf, bufLen ,0)) > 0){
+		body.append(buf,n);
+		memset(buf,0,bufLen);
+		if(n < bufLen){
+			break;
+		}
+	}
+
+
+	cout << "SL: " << statusLine << endl;
+	cout << "Header: " << header << endl;
+	cout << "Body: " << body << endl;
 
 	//受信
+	/*
+	int n = 0;
+	string responseStr;
+	while((n = recv(sock, buf, bufLen ,0)) > 0){
+		responseStr.append(buf,n);
+		memset(buf,0,bufLen);
+		if(n < bufLen){
+			break;
+		}
+	}
+	cout << responseStr << endl;
+	 */
+	/*
 	int n = 0;
 	while (1) {
 		if (fgets (buf, sizeof (buf), fp) == NULL) {
@@ -145,10 +212,26 @@ void HttpRequest::openSocket(int& socket_) {
 		}
 	}
 
+	while (1) {
+			if (fgets (buf, sizeof (buf), fp) == NULL) {
+				break;
+			}
+			// レスポンスヘッダをリストに格納する
+			// --- TO BE IMPLEMENTED --
+			printf ("%s", buf);
+
+			// CRLFが来たらヘッダ終了
+			if (buf[0] == 0x0d && buf[1] == 0x0a) {
+				break;
+			}
+		}
+	 */
+
+	/*
 	if( n = recv(sock, buf, bufLen ,0) > 0){
 		cout << "# " << buf << endl;
 	}
-
+	 */
 
 	/*
 	while (1) {
@@ -181,17 +264,16 @@ void HttpRequest::openSocket(int& socket_) {
 	return;
 }
 
+void HttpRequest::sendData(const int socket) {
+}
+
+
 void HttpRequest::putHeader(const string& name, const string& value) {
 	header_[name] = value;
 }
 
 void HttpRequest::setBody(const string& body) {
 	body_ = body;
-}
-
-void HttpRequest::execute() {
-	int i;
-	openSocket(i);
 }
 
 inline void HttpRequest::setTimeOut(const int& timeout) {
@@ -277,3 +359,5 @@ bool HttpRequest::URL::hasPort() const {
 	}
 	return false;
 }
+
+

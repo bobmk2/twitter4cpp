@@ -15,15 +15,18 @@
 #include "StringUtil.h"
 #include "OAuthUtil.h"
 
-const string OAuthUtil::OAUTH_REQUEST_URL = "http://twitter.com/oauth/request_token";
+using namespace std;
+
+namespace oauth{
+
+const string OAuthUtil::OAUTH_OAUTHORIZE_URL = "http://twitter.com/oauth/authorize";
+const string OAuthUtil::OAUTH_REQUEST_TOKEN_URL = "http://twitter.com/oauth/request_token";
+const string OAuthUtil::OAUTH_ACCESS_TOKEN_URL = "https://api.twitter.com/oauth/access_token";
+
 const string OAuthUtil::SIGNATURE_METHOD = "HMAC-SHA1";
 const string OAuthUtil::OAUTH_VERSION = "1.0";
 
 OAuthUtil::OAuthUtil() {
-}
-
-const string OAuthUtil::getRequestUrl() {
-	return OAUTH_REQUEST_URL;
 }
 
 const string OAuthUtil::getNonce() {
@@ -76,4 +79,6 @@ const void OAuthUtil::makeSignature(string& signature, const string& key, const 
 	hmac_sha1(key.c_str(),key.size(),value.c_str(),value.size(),sha1Buf);
 	base64_encode(sha1Buf,20,base64buf,64);
 	signature = StringUtil::urlEncode(base64buf);
+}
+
 }
