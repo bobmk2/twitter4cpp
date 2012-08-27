@@ -15,14 +15,17 @@
 
 namespace http {
 
+/**
+ * @brief HTTPレスポンス格納用クラス
+ */
 class HttpResponse {
 private:
 	//TODO modify later
-	std::string* statusLine_;
+	std::string* statusLine_;	//!< ステータスライン
 
-	std::map<std::string, std::vector<std::string> >* header_;
+	std::map<std::string, std::vector<std::string> >* header_;	//!< ヘッダ
 
-	std::string* body_;
+	std::string* body_;	//!< ボディ
 
 public:
 	HttpResponse();
@@ -30,21 +33,23 @@ public:
 	HttpResponse(const HttpResponse& response);
 	HttpResponse& operator=(const HttpResponse& response);
 
-	//TODO delete later
-	void setStatusLine(const std::string& statusLine){*statusLine_ = statusLine;}
-	//void setHeader(const std::string& header){*header_ = header;}
 	void putHeader(const std::string& key, const std::string& value){
-		std::cout << "いれるよ[" << key.c_str()<< "]" << "[" << value.c_str() << "]" << std::endl;
 		((*header_)[key]).push_back(value);
 	}
+
+	void print() const;
+
+	//TODO delete later
+	/* Setter */
+	void setStatusLine(const std::string& statusLine){*statusLine_ = statusLine;}
 	void setBody(const std::string& body){*body_ = body;}
 
+	/* Getter */
 	const std::string& getStatusLine() const {return *statusLine_;}
 	const std::map<std::string, std::vector<std::string> >& getHeader() const {return *header_;}
 	std::map<std::string, std::vector<std::string> >* getHeaderPointer() const {return header_;}
 	const std::string& getBody() const {return *body_;}
 
-	void print() const;
 };
 
 } /* namespace http */

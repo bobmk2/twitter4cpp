@@ -15,7 +15,24 @@ using namespace http;
 
 namespace oauth {
 
-AccessToken::AccessToken(const std::string& token, const std::string& tokenSecret, long userId, const std::string& screenName)
+AccessToken::AccessToken()
+:token_(new string()),
+ tokenSecret_(new string()),
+ userId_(-1),
+ screenName_(new string())
+{
+}
+
+AccessToken::AccessToken(const string& token, const string& tokenSecret)
+:token_(new string(token)),
+ tokenSecret_(new string(tokenSecret)),
+ userId_(-1),
+ screenName_(new string())
+{
+	//TODO userIdはtokenから特定可能
+}
+
+AccessToken::AccessToken(const string& token, const string& tokenSecret, long userId, const string& screenName)
 :token_(new string(token)),
  tokenSecret_(new string(tokenSecret)),
  userId_(userId),
@@ -24,6 +41,7 @@ AccessToken::AccessToken(const std::string& token, const std::string& tokenSecre
 }
 
 AccessToken::~AccessToken() {
+	delete(screenName_);
 	delete(tokenSecret_);
 	delete(token_);
 }
@@ -44,7 +62,7 @@ const AccessToken& AccessToken::operator =(const AccessToken& accessToken) {
 	return *this;
 }
 
-AccessToken AccessToken::createInstance(const http::HttpResponse response) {
+AccessToken* AccessToken::createInstance(const http::HttpResponse response) {
 	string body = response.getBody();
 
 	regex_t preg;
@@ -67,6 +85,7 @@ AccessToken AccessToken::createInstance(const http::HttpResponse response) {
 	string userId;
 	string screenName;
 
+	AccessToken* accessToken = NULL;
 	//TODO hack later
 	if(regexec(&preg, body.c_str(), nmatch, pmatch ,0) != 0){
 	}else{
@@ -75,23 +94,47 @@ AccessToken AccessToken::createInstance(const http::HttpResponse response) {
 		RegexUtil::assignRegexValue(body,pmatch[indexUserId],userId);
 		RegexUtil::assignRegexValue(body,pmatch[indexScreenName],screenName);
 
-		cout << "TOKEN  :" << token << endl;
-		cout << "S_TOKEN:" << tokenSecret << endl;
-		cout << "USER_ID:" << userId << endl;
-		cout << "SC_NAME:" << screenName << endl;
+		accessToken = new AccessToken(token,tokenSecret, atol(userId.c_str()),screenName);
 	}
 
-	return AccessToken(token,tokenSecret, atol(userId.c_str()),screenName);
-	//"oauth_token=408291974-SnnDYEe3ys3iIKtFDnb18LibeAe9QlzGd0Uk65f6&oauth_token_secret=RZ9vp0sSKzTBbua9njuc27snURWAyTBJtpqTezsqfg&user_id=408291974&screen_name=ascii1020"
+	return accessToken;
 }
 
-const std::string& AccessToken::getToken() const {
-	return *token_;
+void AccessToken::setToken(const string& token) {
+	*token_ = token;
 }
 
-const std::string& AccessToken::getTokenSecret() const {
-	return *tokenSecret_;
+void AccessToken::setTokenSecret(const string& tokenSecret) {
+	*tokenSecret_ = tokenSecret;
+}
+
+void AccessToken::setUserId(const long & userId) {
+	userId_ = userId;
+}
+
+void AccessToken::setScreenName(const string& screenName) {
+	*screenName_ = screenName;
+}
+
+const string* AccessToken::getToken() const {
+	return token_;
+}
+
+const string* AccessToken::getTokenSecret() const {
+	return tokenSecret_;
+}
+
+long AccessToken::getUserId() const{
+	return userId_;
+}
+
+const string* AccessToken::getScreenName() const{
+	return screenName_;
 }
 
 }
+
+
+
+
 /* namespace oauth */

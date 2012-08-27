@@ -10,6 +10,9 @@
 #include <time.h>
 #include <string>
 
+/**
+ * @brief 時間に関連するユーティリティクラス
+ */
 class TimeUtil {
 private:
 	static const int BUF_MAX_LENGTH = 256;

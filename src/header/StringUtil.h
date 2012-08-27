@@ -11,6 +11,9 @@
 #include <string>
 #include <vector>
 
+/**
+ * @brief 文字列操作用のユーティリティクラス
+ */
 class StringUtil {
 private:
 	static const int MAX_BUF_LENGTH = 256;

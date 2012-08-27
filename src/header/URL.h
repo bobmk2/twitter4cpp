@@ -11,6 +11,9 @@
 
 namespace http {
 
+/**
+ * @brief URL格納用クラス
+ */
 class URL {
 private:
 	std::string url_;	//!< Url

@@ -9,6 +9,9 @@
 
 #include <string>
 
+/**
+ * @brief ユーザクラス
+ */
 class User {
 private:
 	long id_;

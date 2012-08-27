@@ -14,8 +14,6 @@
 using namespace std;
 
 StringUtil::StringUtil() {
-	// TODO Auto-generated constructor stub
-
 }
 
 string StringUtil::urlEncode(const string &str) {

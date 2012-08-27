@@ -22,6 +22,7 @@ using namespace oauth;
 using namespace http;
 using namespace tinyxml2;
 
+
 TwitterImplementer::TwitterImplementer(const std::string& consumerKey, const std::string& consumerSecret,
 		const std::string& oauthToken, const std::string& oauthTokenSecret)
 :Twitter(consumerKey,consumerSecret, oauthToken, oauthTokenSecret)
@@ -32,30 +33,33 @@ TwitterImplementer::TwitterImplementer(const std::string& consumerKey, const std
 TwitterImplementer::~TwitterImplementer() {
 }
 
-void TwitterImplementer::updateStatus(std::string text) {
+void TwitterImplementer::updateStatus(const std::string& text,const long& replyTo) const{
 	string method = "POST";
 	string url = STATUS_UPDATESTATUS_URL;
 	string nonce = OAuthUtil::getNonce();
 	string timestamp = OAuthUtil::getTimestamp();
 
-	string str;
-	str += "include_entities=true&";
-	str += "oauth_consumer_key=" + *consumerKey_ + "&";
-	str += "oauth_nonce=" + nonce + "&";
-	str += "oauth_signature_method=HMAC-SHA1&";
-	str += "oauth_timestamp=" + timestamp + "&";
-	str += "oauth_token=" + *oauthToken_ + "&";
-	str += "oauth_version=1.0&";
-	str += "status=" + StringUtil::urlEncode(text);
+	ApiParameter para;
+	para.put("include_entities","true");
+	para.put("oauth_consumer_key",*consumerKey_);
+	para.put("oauth_nonce",nonce);
+	para.put("oauth_signature_method","HMAC-SHA1");
+	para.put("oauth_timestamp",timestamp);
+	para.put("oauth_token",*oauthToken_);
+	para.put("oauth_version","1.0");
+	para.put("status",StringUtil::urlEncode(text));
+	if(replyTo != -1){
+		para.put("in_reply_to_status_id", StringUtil::toStr(replyTo));
+	}
 
 	//signatureの元となる文字列を生成
-	string sigBase = StringUtil::urlEncode(method) + "&" + StringUtil::urlEncode(url) + "&" + StringUtil::urlEncode(str);
+	string sigBase = StringUtil::urlEncode(method) + "&" + StringUtil::urlEncode(url) + "&" + StringUtil::urlEncode(para.toUrlString());
 
 	//signatureを作る
 	string signature;
 	OAuthUtil::makeSignature(signature, *consumerSecret_ + "&" + *oauthTokenSecret_, sigBase);
 
-	url += "?" + str + "&oauth_signature=" + signature;
+	url += "?" + para.toUrlString() + "&oauth_signature=" + signature;
 
 	string body = "status=" + StringUtil::urlEncode(text);
 
@@ -82,10 +86,14 @@ void TwitterImplementer::test(){
 int TwitterImplementer::getHomeTimeline(std::vector<Tweet*>* const tweetList, unsigned int count,unsigned long sinceId,unsigned long maxId,unsigned int page) const{
 	string method = "GET";
 	string url = TIMELINE_HOMETIMELINE_URL;
+
+	//ランダム文字列と現在時間を取得
 	string nonce = OAuthUtil::getNonce();
 	string timestamp = OAuthUtil::getTimestamp();
 
+	//パラメータを格納していく
 	ApiParameter para;
+	cout << "########## " << endl;
 	para.put("include_entities","true");
 	para.put("oauth_consumer_key", *consumerKey_);
 	para.put("oauth_nonce", nonce);
@@ -93,11 +101,20 @@ int TwitterImplementer::getHomeTimeline(std::vector<Tweet*>* const tweetList, un
 	para.put("oauth_timestamp", timestamp);
 	para.put("oauth_token", *oauthToken_);
 	para.put("oauth_version","1.0");
-	if(count != DEFAULT_LOAD_COUNT){para.put("count",StringUtil::toStr(count));}
-	if(maxId != UNUSED){para.put("max_id",StringUtil::toStr(maxId));}
-	if(sinceId != UNUSED){para.put("since_id",StringUtil::toStr(sinceId));}
-	if(page != UNUSED){para.put("page",StringUtil::toStr(page));}
+	if(count != DEFAULT_LOAD_COUNT){
+		para.put("count",StringUtil::toStr(count));
+	}
+	if(maxId != UNUSED){
+		para.put("max_id",StringUtil::toStr(maxId));
+	}
+	if(sinceId != -1){
+		para.put("since_id",StringUtil::toStr(sinceId));
+	}
+	if(page != UNUSED){
+		para.put("page",StringUtil::toStr(page));
+	}
 
+	//パラメータ部分の文字列を取得
 	string paraStr = para.toUrlString();
 
 	//signatureの元となる文字列を生成
@@ -109,6 +126,7 @@ int TwitterImplementer::getHomeTimeline(std::vector<Tweet*>* const tweetList, un
 
 	url += "?" + paraStr + "&oauth_signature=" + signature;
 
+	//
 	URL postUrl(url);
 	HttpUrlConnection urlConn(postUrl);
 	urlConn.setRequestMethod(method);
@@ -120,9 +138,10 @@ int TwitterImplementer::getHomeTimeline(std::vector<Tweet*>* const tweetList, un
 	XMLDocument doc;
 	doc.Parse(response.getBody().c_str());
 	XMLElement* statuses = doc.FirstChildElement("statuses");
-
+	if(statuses == NULL){
+		return 0;
+	}
 	XMLElement* status = statuses->FirstChildElement("status");
-
 	while(status != NULL){
 		Tweet* tweet = new Tweet();
 		tweet->setId(atol(status->FirstChildElement("id")->GetText()));
@@ -130,6 +149,10 @@ int TwitterImplementer::getHomeTimeline(std::vector<Tweet*>* const tweetList, un
 		tweet->setSource(status->FirstChildElement("source")->GetText());
 		tweet->setFromUserScreenName(status->FirstChildElement("user")->FirstChildElement("screen_name")->GetText());
 		tweet->setFromUserName(status->FirstChildElement("user")->FirstChildElement("name")->GetText());
+
+		//TODO hack later
+		TwitterDate date = TwitterDate::createInstance(status->FirstChildElement("created_at")->GetText());
+		tweet->setCreatedAt(date);
 
 		XMLElement* userElement = status->FirstChildElement("user");
 		const char* id = userElement->FirstChildElement("id")->GetText();
@@ -150,7 +173,9 @@ int TwitterImplementer::getHomeTimeline(std::vector<Tweet*>* const tweetList, un
 		if(profileImageUrlHttps != NULL){user.setProfileImageUrlHttps(profileImageUrlHttps);}
 		if(url != NULL){user.setUrl(url);}
 		if(desc != NULL){user.setDescription(desc);}
-		//TODO add later
+		//TODO add another element later
+
+		cout << "Date:" << status->FirstChildElement("created_at")->GetText() << endl;
 
 		tweet->setUser(user);
 		/*

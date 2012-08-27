@@ -44,7 +44,7 @@ const RequestToken& RequestToken::operator=(const RequestToken& reqToken) {
 	return *this;
 }
 
-RequestToken RequestToken::createInstance(const http::HttpResponse response){
+RequestToken* RequestToken::createInstance(const http::HttpResponse response){
 	string body = response.getBody();
 
 	regex_t preg;
@@ -62,6 +62,7 @@ RequestToken RequestToken::createInstance(const http::HttpResponse response){
 	string tokenSecret;
 
 	//TODO hack later
+	RequestToken* reqToken = NULL;
 	if(regexec(&preg, body.c_str(), nmatch, pmatch ,0) != 0){
 	}else{
 		RegexUtil::assignRegexValue(body,pmatch[indexToken],token);
@@ -69,11 +70,10 @@ RequestToken RequestToken::createInstance(const http::HttpResponse response){
 
 		cout << "TOKEN:" << token << endl;
 		cout << "S_TOKEN:" << tokenSecret << endl;
-
+		reqToken = new RequestToken(token, tokenSecret);
 	}
 
-	return RequestToken(token, tokenSecret);
-	//oauth_token=e1jiVuhRqy51mnkb092Rhy30pPmTE8BifB0cA4Ds&oauth_token_secret=30YWdRilRR5qSOOlopTsdw6e3Jc6UrSbMOLg2JrMI&oauth_callback_confirmed=true
+	return reqToken;
 }
 
 const string& RequestToken::getToken() const{

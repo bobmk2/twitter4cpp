@@ -13,6 +13,10 @@
 
 using namespace  std;
 
+/**
+ * @brief HTTPリクエストを行うためのクラス
+ * @todo 汚いので直す
+ */
 class HttpRequest {
 public:
 	class URL;
@@ -20,17 +24,17 @@ public:
 private:
 	class RequestLine;
 
-	const URL* url_;
+	const URL* url_;//!< URL
 
-	string method_;
-	string httpVer_;
+	string method_;	//!< リクエスト方法
+	string httpVer_;//!< HTTPバージョン
 
-	map<string, string> header_;
-	string body_;
+	map<string, string> header_;	//!< ヘッダ
+	string body_;	//!< ボディ
 
-	int timeout_;
+	int timeout_;	//!< タイムアウト時間
 
-	int socket_;
+	int socket_;	//!< ソケット
 
 	static const string DEFAULT_METHOD;
 	static const string DEFAULT_HTTP_VER;
@@ -49,6 +53,11 @@ public:
 	void execute();
 	void closeConnection();
 
+	/**
+	 * @brief ヘッダを追加する
+	 * @param name　　ヘッダ名
+	 * @param value　ヘッダの値
+	 */
 	void putHeader(const string& name, const string& value);
 
 	string toString() const;
@@ -78,6 +87,7 @@ public:
 		URL(const string& url);
 		~URL();
 
+		/* Geter */
 		inline string getHost() const{return host_;}
 		inline string getPort() const{return port_;}
 		inline string getPath() const{return path_;}

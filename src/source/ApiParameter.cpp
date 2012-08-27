@@ -5,6 +5,7 @@
  */
 
 #include "ApiParameter.h"
+#include <iostream>
 
 using namespace std;
 
@@ -24,6 +25,8 @@ void ApiParameter::inputParameterString(std::ostringstream* oss, const std::stri
 		if(oss->tellp() > 0){
 			*oss << separator;
 		}
+		std::cout << (*iter).first << " // " << (*iter).second << std::endl;
+
 		*oss << (*iter).first;
 		*oss << "=";
 		*oss << (*iter).second;

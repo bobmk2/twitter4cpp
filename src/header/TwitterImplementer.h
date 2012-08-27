@@ -9,6 +9,9 @@
 
 #include "Twitter.h"
 
+/**
+ * @brief Twitterの実装クラス
+ */
 class TwitterImplementer: public Twitter {
 private:
 	void test();
@@ -18,7 +21,7 @@ public:
 	virtual ~TwitterImplementer();
 
 	//# StatusMethods
-	void updateStatus(std::string text);
+	void updateStatus(const std::string& text,const long& replyTo = -1) const;
 
 	//# TimelineMethods
 	int getHomeTimeline(std::vector<Tweet*>* const tweetList, unsigned int count = DEFAULT_LOAD_COUNT,

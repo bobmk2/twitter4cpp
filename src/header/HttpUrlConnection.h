@@ -16,6 +16,9 @@ using namespace std;
 
 namespace http{
 
+/**
+ * @brief HTTPでの接続を補助するクラス
+ */
 //TODO Timeoutの実装
 class HttpUrlConnection {
 private:

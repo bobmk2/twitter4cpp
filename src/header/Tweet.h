@@ -10,26 +10,30 @@
 #include <string>
 #include <time.h>
 #include "User.h"
+#include "TwitterDate.h"
 
+/**
+ * @brief ツイートクラス
+ */
 class Tweet {
 private:
 	static const long NOT_SPECIFIED = -1;
 
-	long id_;
-	std::string* text_;
-	std::string* source_;
+	long id_;				//!< ツイートID
+	std::string* text_;		//!< 本文
+	std::string* source_;	//!< ソース（from XXXの箇所)
 
-	time_t* createdAt_;
+	TwitterDate* createdAt_;//!< 投稿日時
 
-	long fromUserId_;
-	std::string* fromUserName_;
-	std::string* fromUserScreenName_;
+	long fromUserId_;					//!< 投稿者のユーザID
+	std::string* fromUserName_;			//!< 投稿者のユーザ名
+	std::string* fromUserScreenName_;	//!< 投稿者のスクリーン名
 
-	long toUserId_;
-	std::string* toUserName_;
-	std::string* toUserScreenName_;
+	long toUserId_;						//!< 宛先のユーザID
+	std::string* toUserName_;			//!< 宛先のユーザ名
+	std::string* toUserScreenName_;		//!< 宛先の
 
-	User* user_;
+	User* user_;						//!< 投稿ユーザ情報
 
 public:
 	Tweet();
@@ -40,7 +44,7 @@ public:
 	void setId(const long& id);
 	void setText(const std::string& text);
 	void setSource(const std::string& source);
-	void setCreatedAt(const time_t& createdAt);
+	void setCreatedAt(const TwitterDate& createdAt);
 
 	void setFromUserId(const long& fromUserid);
 	void setFromUserName(const std::string& fromUserName);
@@ -56,7 +60,7 @@ public:
 	long getId() const;
 	const std::string* getText() const;
 	const std::string* getSource() const;
-	const time_t* getCreatedAt() const;
+	const TwitterDate* getCreatedAt() const;
 
 	long getFromUserId() const;
 	const std::string* getFromUserName() const;

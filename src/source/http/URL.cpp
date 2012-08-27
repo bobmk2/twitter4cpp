@@ -11,7 +11,6 @@
 
 using namespace std;
 
-
 namespace http {
 URL::URL(const string& url)
 :url_(url){

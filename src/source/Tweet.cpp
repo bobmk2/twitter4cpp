@@ -77,14 +77,8 @@ void Tweet::setSource(const string& source) {
 	*source_ = source;
 }
 
-void Tweet::setCreatedAt(const time_t& createdAt){
-	if(createdAt_ == NULL){createdAt_ = new time_t();}
-
-	tm* tss = localtime(&createdAt);
-	char buf[256];
-	strftime(buf, sizeof(buf),"%Y-%m-%d %H:%M", tss);
-	std::cout << "INSERT:" << buf << std::endl;
-
+void Tweet::setCreatedAt(const TwitterDate& createdAt){
+	if(createdAt_ == NULL){createdAt_ = new TwitterDate();}
 	*createdAt_ = createdAt;
 }
 
@@ -132,7 +126,7 @@ const string* Tweet::getSource() const{
 	return source_;
 }
 
-const time_t* Tweet::getCreatedAt() const{
+const TwitterDate* Tweet::getCreatedAt() const{
 	return createdAt_;
 }
 

@@ -11,6 +11,10 @@
 
 namespace method {
 
+/**
+ * @brief ツイートの投稿するメソッドを持つインターフェース
+ * @todo クラス名をTwitterAPIのDocにもとづいて変える
+ */
 class StatusMethods {
 protected:
 	static const std::string STATUS_UPDATESTATUS_URL;
@@ -19,7 +23,12 @@ protected:
 public:
 	virtual ~StatusMethods();
 
-	virtual void updateStatus(std::string status) = 0;
+	/**
+	 * @brief ツイートを投稿する
+	 * @param text　本文
+	 * @param replyTo　返信先のツイートID
+	 */
+	virtual void updateStatus(const std::string& text,const long& replyTo = -1) const = 0;
 
 };
 

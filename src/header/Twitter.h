@@ -10,6 +10,9 @@
 #include "StatusMethods.h"
 #include "TimelineMethods.h"
 
+/**
+ * @brief TwitterAPIを叩くためのクラス
+ */
 class Twitter : public method::StatusMethods, public method::TimelineMethods{
 protected:
 	std::string* consumerKey_;
@@ -23,6 +26,7 @@ protected:
 			const std::string& accessToken, const std::string& tokenSecret);
 	Twitter(const Twitter& twitter);
 
+	/* Getter */
 	const std::string& getConsumerKey(){return *consumerKey_;}
 	const std::string& getConsumerSecret(){return *consumerSecret_;}
 	const std::string& getOAuthToken(){return *oauthToken_;}

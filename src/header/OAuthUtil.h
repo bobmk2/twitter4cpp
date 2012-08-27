@@ -11,6 +11,9 @@
 #include <uuid/uuid.h>
 #include <string>
 
+/**
+ * @brief OAuth用のユーティリティクラス
+ */
 namespace oauth{
 class OAuthUtil {
 private:

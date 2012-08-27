@@ -12,6 +12,9 @@
 
 namespace oauth {
 
+/**
+ * @brief リクエストトークン
+ */
 class RequestToken {
 private:
 	std::string* token_;
@@ -24,8 +27,14 @@ public:
 
 	virtual ~RequestToken();
 
-	static RequestToken createInstance(const http::HttpResponse response);
+	/**
+	 * @brief リクエストトークンのインスタンスを生成する
+	 * @param response　Twitterから返されたHTTPレスポンス
+	 * @return　リクエストトークン
+	 */
+	static RequestToken* createInstance(const http::HttpResponse response);
 
+	/* Getter */
 	std::string getAuthenticationUrl() const;
 	const std::string& getToken() const;
 	const std::string& getTokenSecret() const;
