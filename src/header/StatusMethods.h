@@ -9,7 +9,7 @@
 
 #include <string>
 
-namespace method {
+namespace api {
 
 /**
  * @brief ツイートの投稿するメソッドを持つインターフェース
@@ -25,6 +25,7 @@ public:
 
 	/**
 	 * @brief ツイートを投稿する
+	 * このメソッドでは http://twitter.com/statuses/update.xml を叩く
 	 * @param text　本文
 	 * @param replyTo　返信先のツイートID
 	 */

@@ -11,7 +11,7 @@
 #include <string>
 #include "Tweet.h"
 
-namespace method{
+namespace api{
 
 /**
  * @brief ツイートを取得するためのメソッド群を持つインターフェース
@@ -30,6 +30,7 @@ public:
 
 	/**
 	 * @brief 認証ユーザのHomeTimeLineを取得する
+	 * このメソッドは http://api.twitter.com/1/statuses/home_timeline.xml を叩く
 	 * @param[in] tweetList ツイート格納用のリスト
 	 * @param count		読み込むツイート数
 	 * @param sinceId	このID以降のツイートを読み込むためのツイートID

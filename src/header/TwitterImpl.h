@@ -13,8 +13,6 @@
  * @brief Twitterの実装クラス
  */
 class TwitterImpl: public Twitter {
-private:
-	void test();
 public:
 	TwitterImpl(const std::string& consumerKey, const std::string& consumerSecret, const std::string& oauthToken,
 			const std::string& oauthTokenSecret);
