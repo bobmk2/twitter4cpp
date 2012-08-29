@@ -6,7 +6,7 @@
 
 #include "TwitterFactory.h"
 
-#include "TwitterImplementer.h"
+#include "TwitterImpl.h"
 
 using namespace std;
 using namespace oauth;
@@ -18,7 +18,7 @@ TwitterFactory::TwitterFactory() {
 
 Twitter* TwitterFactory::createInstance(const string& consumerKey, const string& consumerSecret,
 		const string& oauthToken, const string& oauthTokenSecret) {
-	return new TwitterImplementer(consumerKey, consumerSecret, oauthToken, oauthTokenSecret);
+	return new TwitterImpl(consumerKey, consumerSecret, oauthToken, oauthTokenSecret);
 }
 
 Twitter* TwitterFactory::createInstance(const string& consumerKey, const string& consumerSecret,

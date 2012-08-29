@@ -1,24 +1,24 @@
 /*
- * TwitterImplementer.h
+ * TwitterImpl.h
  *
  *  Created on: 2012/08/13
  */
 
-#ifndef TWITTERIMPLEMENTER_H_
-#define TWITTERIMPLEMENTER_H_
+#ifndef TWITTERIMPL_H_
+#define TWITTERIMPL_H_
 
 #include "Twitter.h"
 
 /**
  * @brief Twitterの実装クラス
  */
-class TwitterImplementer: public Twitter {
+class TwitterImpl: public Twitter {
 private:
 	void test();
 public:
-	TwitterImplementer(const std::string& consumerKey, const std::string& consumerSecret, const std::string& oauthToken,
+	TwitterImpl(const std::string& consumerKey, const std::string& consumerSecret, const std::string& oauthToken,
 			const std::string& oauthTokenSecret);
-	virtual ~TwitterImplementer();
+	virtual ~TwitterImpl();
 
 	//# StatusMethods
 	void updateStatus(const std::string& text,const long& replyTo = -1) const;
@@ -28,4 +28,4 @@ public:
 			unsigned long sinceId = UNUSED, unsigned long maxId = UNUSED, unsigned int page = UNUSED) const;
 };
 
-#endif /* TWITTERIMPLEMENTER_H_ */
+#endif /* TWITTERIMPL_H_ */

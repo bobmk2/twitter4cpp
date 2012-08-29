@@ -1,10 +1,10 @@
 /*
- * TwitterImplementer.cpp
+ * TwitterImpl.cpp
  *
  *  Created on: 2012/08/13
  */
 
-#include "TwitterImplementer.h"
+#include "TwitterImpl.h"
 #include "OAuthUtil.h"
 #include "StringUtil.h"
 #include "HttpUrlConnection.h"
@@ -23,17 +23,17 @@ using namespace http;
 using namespace tinyxml2;
 
 
-TwitterImplementer::TwitterImplementer(const std::string& consumerKey, const std::string& consumerSecret,
+TwitterImpl::TwitterImpl(const std::string& consumerKey, const std::string& consumerSecret,
 		const std::string& oauthToken, const std::string& oauthTokenSecret)
 :Twitter(consumerKey,consumerSecret, oauthToken, oauthTokenSecret)
 {
 
 }
 
-TwitterImplementer::~TwitterImplementer() {
+TwitterImpl::~TwitterImpl() {
 }
 
-void TwitterImplementer::updateStatus(const std::string& text,const long& replyTo) const{
+void TwitterImpl::updateStatus(const std::string& text,const long& replyTo) const{
 	string method = "POST";
 	string url = STATUS_UPDATESTATUS_URL;
 	string nonce = OAuthUtil::getNonce();
@@ -72,7 +72,7 @@ void TwitterImplementer::updateStatus(const std::string& text,const long& replyT
 	response.print();
 }
 
-void TwitterImplementer::test(){
+void TwitterImpl::test(){
 	URL postUrl("http://cboard.cprogramming.com/c-programming/89870-check-eof-when-using-fgets.html");
 	HttpUrlConnection urlConn(postUrl);
 
@@ -83,7 +83,7 @@ void TwitterImplementer::test(){
 
 }
 
-int TwitterImplementer::getHomeTimeline(std::vector<Tweet*>* const tweetList, unsigned int count,unsigned long sinceId,unsigned long maxId,unsigned int page) const{
+int TwitterImpl::getHomeTimeline(std::vector<Tweet*>* const tweetList, unsigned int count,unsigned long sinceId,unsigned long maxId,unsigned int page) const{
 	string method = "GET";
 	string url = TIMELINE_HOMETIMELINE_URL;
 
