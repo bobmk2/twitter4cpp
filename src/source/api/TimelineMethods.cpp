@@ -8,9 +8,9 @@
 
 using namespace std;
 
-namespace method{
+namespace api{
 
-const string TimelineMethods::TIMELINE_HOMETIMELINE_URL = "http://api.twitter.com/1/statuses/home_timeline.xml";//"http://twitter.com/statuses/home_timeline.xml";
+const string TimelineMethods::TIMELINE_HOMETIMELINE_URL = "http://api.twitter.com/1/statuses/home_timeline.xml";
 
 TimelineMethods::TimelineMethods() {
 }

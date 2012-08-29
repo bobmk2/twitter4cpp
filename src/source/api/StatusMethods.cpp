@@ -8,7 +8,7 @@
 
 using namespace std;
 
-namespace method{
+namespace api{
 
 const string StatusMethods::STATUS_UPDATESTATUS_URL = "http://twitter.com/statuses/update.xml";
 
